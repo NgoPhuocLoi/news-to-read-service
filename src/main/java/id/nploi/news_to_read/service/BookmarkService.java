@@ -1,5 +1,6 @@
 package id.nploi.news_to_read.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class BookmarkService {
     }
 
     public List<BookmarkEntity> getAllBookmarks() {
-        return this.bookmarkRepository.findAll();
+        return this.bookmarkRepository.findAllByOrderByCreatedAtDesc();
     }
 
     @SuppressWarnings("null")
@@ -40,6 +41,7 @@ public class BookmarkService {
                 .title(dto.title())
                 .description(dto.description())
                 .url(dto.url())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         // Handle tags if provided
@@ -59,6 +61,7 @@ public class BookmarkService {
         entity.setTitle(dto.title());
         entity.setDescription(dto.description());
         entity.setUrl(dto.url());
+        entity.setUpdatedAt(LocalDateTime.now());
 
         // Handle tags if provided
         if (dto.tags() != null) {

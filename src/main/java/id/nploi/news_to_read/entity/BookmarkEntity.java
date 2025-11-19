@@ -3,9 +3,6 @@ package id.nploi.news_to_read.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.hibernate.annotations.CurrentTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,11 +34,9 @@ public class BookmarkEntity {
     private String url;
 
     @Column(name = "created_at")
-    @CurrentTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @ManyToMany
