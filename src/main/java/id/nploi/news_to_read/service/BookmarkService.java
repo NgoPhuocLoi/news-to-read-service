@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import id.nploi.news_to_read.dto.BookmarkRequestDto;
 import id.nploi.news_to_read.entity.BookmarkEntity;
 import id.nploi.news_to_read.entity.TagEntity;
+import id.nploi.news_to_read.exception.ResourceNotFoundException;
 import id.nploi.news_to_read.repository.BookmarkRepository;
 import id.nploi.news_to_read.repository.TagRepository;
 
@@ -48,6 +49,36 @@ public class BookmarkService {
         }
 
         return bookmarkRepository.save(entity);
+    }
+
+    @SuppressWarnings("null")
+    @Transactional
+    public BookmarkEntity updateBookmark(Long id, BookmarkRequestDto dto) {
+        BookmarkEntity entity = bookmarkRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bookmark", "id", id));
+        entity.setTitle(dto.title());
+        entity.setDescription(dto.description());
+        entity.setUrl(dto.url());
+
+        // Handle tags if provided
+        if (dto.tags() != null) {
+            if (dto.tags().isEmpty()) {
+                entity.setTags(new ArrayList<>());
+            } else {
+                List<TagEntity> tagEntities = findOrCreateTags(dto.tags());
+                entity.setTags(tagEntities);
+            }
+        }
+
+        return bookmarkRepository.save(entity);
+    }
+
+    @Transactional
+    public void deleteBookmark(Long id) {
+        if (!bookmarkRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Bookmark", "id", id);
+        }
+        bookmarkRepository.deleteById(id);
     }
 
     /**
