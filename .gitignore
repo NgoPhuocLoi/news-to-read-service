@@ -202,4 +202,4 @@ README.html
 
 .env
 init_env.sh
-**/**/application.properties
+# **/**/application.properties
